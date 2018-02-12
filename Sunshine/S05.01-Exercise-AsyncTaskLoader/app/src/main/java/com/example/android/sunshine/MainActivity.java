@@ -15,8 +15,11 @@
  */
 package com.example.android.sunshine;
 
+import android.app.LoaderManager;
+import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,9 +42,11 @@ import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
 import java.net.URL;
 
 // TODO (1) Implement the proper LoaderCallbacks interface and the methods of that interface
-public class MainActivity extends AppCompatActivity implements ForecastAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements ForecastAdapterOnClickHandler,
+        LoaderManager.LoaderCallbacks<String>{
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String WEATHER_EXTRA = "weather";
 
     private RecyclerView mRecyclerView;
     private ForecastAdapter mForecastAdapter;
@@ -160,6 +165,49 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
         mRecyclerView.setVisibility(View.INVISIBLE);
         /* Then, show the error */
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public Loader<String> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<String>(this) {
+            String mWeatherData;
+            @Override
+            public String loadInBackground() {
+                String 
+            }
+
+            @Override
+            protected void onStartLoading() {
+                if (args == null) {
+                    return;
+                }
+
+                mLoadingIndicator.setVisibility(View.VISIBLE);
+
+                if (mWeatherData != null) {
+                    deliverResult(mWeatherData);
+                } else {
+                    forceLoad();
+                }
+
+            }
+
+            @Override
+            public void deliverResult(String data) {
+                mWeatherData = data;
+                super.deliverResult(mWeatherData);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<String> loader, String data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<String> loader) {
+
     }
 
     // TODO (6) Remove any and all code from MainActivity that references FetchWeatherTask
