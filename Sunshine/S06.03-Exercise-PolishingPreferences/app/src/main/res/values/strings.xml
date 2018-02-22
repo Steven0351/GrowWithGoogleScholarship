@@ -43,6 +43,8 @@
     <!--Used by Preferences  -->
     <!-- - - - - - - - - - - -->
 
+    <string name="shared_preferences_name">shared_preferences</string>
+
     <!-- Label for the location preference [CHAR LIMIT=30] -->
     <string name="pref_location_label">Location</string>
 
